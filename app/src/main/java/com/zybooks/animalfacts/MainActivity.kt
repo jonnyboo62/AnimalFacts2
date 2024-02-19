@@ -15,6 +15,7 @@ import java.util.Random
 import androidx.activity.result.contract.ActivityResultContracts
 
 
+
 /**
  * Class that is the start of the app, handles moving to the settings
  * and generates facts based on the complexity and what animal is selected
