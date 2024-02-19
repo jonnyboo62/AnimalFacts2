@@ -1,9 +1,12 @@
 package com.zybooks.animalfacts
+import android.Manifest
+import android.annotation.SuppressLint
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.MenuItem
@@ -13,7 +16,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Random
 import androidx.activity.result.contract.ActivityResultContracts
+import android.media.MediaPlayer
+import android.util.Log
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
+import android.widget.Toast
 
+const val TAG = "MainActivity"
 
 
 /**
@@ -27,6 +36,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var animalFacts: List<String>
     private var currentAnimal = "Ape"
     private var currentComplexity = "Moderate"
+    private lateinit var mediaPlayer: MediaPlayer
+
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Primary App Functionality                                                                  //
@@ -56,6 +69,11 @@ class MainActivity : AppCompatActivity() {
         registerForContextMenu(fact)
         updatePage()
 
+        if (hasLocationPermission()) {
+            findLocation()
+            Toast.makeText(this, "Fun Fact: Some apes could be in your area, go to a zoo", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     /**
@@ -70,6 +88,14 @@ class MainActivity : AppCompatActivity() {
         } else if (currentComplexity == "Complex") {
             indexModifier = 20
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        // Play a sound when a button is clicked                                                  //
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.fact)
+        mediaPlayer.start()
+
         val randomIndex = Random().nextInt(10)
         val index = randomIndex + indexModifier
         fact.text = animalFacts[index] + "\n\n" + fact.text.toString()
@@ -177,5 +203,41 @@ class MainActivity : AppCompatActivity() {
         startForResult.launch(intent)
 
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Location Services                                                                          //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    fun hasLocationPermission(): Boolean {
+
+        // Request fine location permission if not already granted
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            return false
+        }
+        return true
+    }
+
+    val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // App can request location
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun findLocation() {
+        val client = LocationServices.getFusedLocationProviderClient(this)
+
+        client.lastLocation
+            .addOnSuccessListener(this) { location ->
+                Log.d(TAG, "location = $location") }
+    }
+
 
 }

@@ -1,12 +1,18 @@
 package com.zybooks.animalfacts
 
 import android.content.Intent
+import android.graphics.drawable.AnimationDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Spinner
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.RadioGroup
+import androidx.core.content.ContextCompat
+import com.zybooks.animalfacts.R.drawable
 
 
 /**
@@ -32,7 +38,16 @@ class SettingsActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, animals)
         animal_spinner.adapter = adapter
 
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        // Play Animation                                                                         //
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        val partyTime: ImageView = findViewById(R.id.party_time)
+        partyTime.setBackgroundResource(R.drawable.party_time)
+        val apeAnimation = partyTime.background as AnimationDrawable
+        apeAnimation.start()
+
     }
+
 
     /**
      * Return to the home page where facts can be generated

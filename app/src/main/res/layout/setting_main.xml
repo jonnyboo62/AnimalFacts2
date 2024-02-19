@@ -10,7 +10,9 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp"
-    tools:context=".SettingsActivity">
+    android:background="@drawable/party_time"
+    tools:context=".SettingsActivity">.
+
 
     <TextView
         android:layout_width="match_parent"
@@ -74,7 +76,10 @@
         android:textSize="24sp"
         android:onClick="returnHome" />
 
-
+    <ImageView
+        android:id="@+id/party_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>
