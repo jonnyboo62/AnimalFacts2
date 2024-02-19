@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
  * Class that is the start of the app, handles moving to the settings
  * and generates facts based on the complexity and what animal is selected
  */
+
 class MainActivity : AppCompatActivity() {
     private lateinit var fact: TextView
     private lateinit var factButton: TextView
